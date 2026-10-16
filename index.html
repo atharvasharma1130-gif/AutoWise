@@ -1,0 +1,1013 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#0a0d14">
+<title>AutoWise — Vehicle Affordability</title>
+
+<style>
+:root {
+  --bg:#0a0d14;
+  --surface:#111722;
+  --surface2:#171f2d;
+  --border:#283447;
+  --text:#f3f6fc;
+  --muted:#93a1b7;
+  --accent:#a7f36b;
+  --blue:#88a9ff;
+  --red:#ff7888;
+  --yellow:#ffd477;
+  --radius:18px;
+}
+
+* { box-sizing:border-box; }
+html { scroll-behavior:smooth; }
+
+body {
+  margin:0;
+  background:
+    radial-gradient(ellipse at 80% 0%, #253b291d, transparent 38%),
+    var(--bg);
+  color:var(--text);
+  font-family:Inter,system-ui,-apple-system,sans-serif;
+  line-height:1.55;
+}
+
+button,input { font:inherit; }
+button { cursor:pointer; }
+
+.container {
+  max-width:1240px;
+  margin:auto;
+  padding:28px 22px 60px;
+}
+
+header {
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:16px;
+  padding-bottom:25px;
+  border-bottom:1px solid var(--border);
+}
+
+.brand {
+  font-size:24px;
+  font-weight:850;
+  letter-spacing:-1px;
+}
+.brand span { color:var(--accent); }
+
+.pill {
+  border:1px solid var(--border);
+  padding:7px 12px;
+  border-radius:30px;
+  font-size:10px;
+  color:var(--muted);
+  letter-spacing:.5px;
+}
+
+.hero {
+  padding:52px 0 35px;
+  animation:appear .65s ease both;
+}
+
+.eyebrow {
+  color:var(--accent);
+  font-size:11px;
+  font-weight:800;
+  text-transform:uppercase;
+  letter-spacing:2px;
+}
+
+h1 {
+  font-size:clamp(36px,6vw,66px);
+  line-height:1.02;
+  letter-spacing:-2.5px;
+  margin:14px 0 18px;
+}
+h1 span { color:var(--accent); }
+
+.hero p {
+  max-width:680px;
+  color:var(--muted);
+  font-size:15px;
+}
+
+.layout {
+  display:grid;
+  grid-template-columns:minmax(0,1fr) minmax(300px,.9fr);
+  gap:22px;
+  align-items:start;
+}
+
+.panel,.result-card {
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:var(--radius);
+  padding:23px;
+  margin-bottom:18px;
+  min-width:0;
+}
+
+.panel h2,.result-card h2 {
+  font-size:18px;
+  margin:0;
+  letter-spacing:-.3px;
+}
+
+.subtext {
+  font-size:12px;
+  color:var(--muted);
+  margin:5px 0 22px;
+}
+
+.section-label {
+  font-size:10px;
+  font-weight:800;
+  letter-spacing:1.8px;
+  color:var(--accent);
+  text-transform:uppercase;
+  margin:25px 0 13px;
+}
+.section-label:first-of-type { margin-top:0; }
+
+.fields {
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:15px;
+}
+.field { min-width:0; }
+.field.full { grid-column:1/-1; }
+
+label {
+  display:block;
+  font-size:12px;
+  color:#c4cee0;
+  margin-bottom:7px;
+}
+
+input[type="number"] {
+  display:block;
+  width:100%;
+  min-width:0;
+  background:#0b1019;
+  color:var(--text);
+  border:1px solid var(--border);
+  border-radius:10px;
+  padding:13px 12px;
+  outline:none;
+  transition:border-color .2s,box-shadow .2s,background .2s;
+}
+
+input::placeholder { color:#526077; }
+
+input:focus {
+  border-color:var(--accent);
+  box-shadow:0 0 0 3px #a7f36b15;
+  background:#0e151f;
+}
+
+.hint {
+  font-size:10px;
+  color:var(--muted);
+  margin-top:6px;
+  line-height:1.6;
+}
+
+.interest-box {
+  background:#0b1019;
+  border:1px solid var(--border);
+  border-radius:12px;
+  padding:16px;
+}
+
+.interest-top {
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+}
+
+.interest-value {
+  color:var(--accent);
+  font-size:25px;
+  font-weight:850;
+  letter-spacing:-1px;
+}
+
+input[type="range"] {
+  width:100%;
+  margin:19px 0 7px;
+  accent-color:var(--accent);
+  cursor:pointer;
+}
+
+.range-labels {
+  display:flex;
+  justify-content:space-between;
+  color:var(--muted);
+  font-size:10px;
+}
+
+.actions {
+  display:flex;
+  gap:10px;
+  flex-wrap:wrap;
+  margin-top:25px;
+}
+
+.btn {
+  padding:12px 17px;
+  border-radius:10px;
+  border:1px solid var(--border);
+  font-size:12px;
+  font-weight:800;
+  transition:transform .2s,opacity .2s,background .2s;
+}
+.btn:hover { transform:translateY(-2px); }
+.btn:active { transform:scale(.98); }
+
+.btn-primary {
+  background:var(--accent);
+  color:#11190b;
+  border-color:var(--accent);
+}
+.btn-secondary {
+  background:var(--surface2);
+  color:var(--text);
+}
+
+.error-message {
+  color:var(--red);
+  font-size:12px;
+  margin-top:14px;
+}
+
+.results { position:sticky; top:15px; }
+
+.hero-result {
+  background:linear-gradient(145deg,#1d3024,#141c23 72%);
+  border:1px solid #3c5941;
+  border-radius:var(--radius);
+  padding:24px;
+  margin-bottom:17px;
+  overflow:hidden;
+}
+
+.status {
+  display:inline-block;
+  font-size:10px;
+  font-weight:850;
+  letter-spacing:.7px;
+  padding:6px 10px;
+  border-radius:30px;
+  background:#ffffff0c;
+}
+.status.good { color:var(--accent); }
+.status.warn { color:var(--yellow); }
+.status.bad { color:var(--red); }
+
+.result-label {
+  color:var(--muted);
+  font-size:12px;
+  margin-top:20px;
+}
+
+.big {
+  font-size:clamp(30px,4vw,43px);
+  letter-spacing:-1.5px;
+  font-weight:850;
+  margin:4px 0;
+  overflow-wrap:anywhere;
+}
+
+.result-description {
+  color:var(--muted);
+  font-size:11px;
+}
+
+.bar {
+  height:7px;
+  background:#273244;
+  border-radius:20px;
+  overflow:hidden;
+  margin:10px 0 6px;
+}
+
+.bar-fill {
+  height:100%;
+  width:0%;
+  border-radius:20px;
+  transition:width .75s cubic-bezier(.2,.7,.2,1);
+}
+.green { background:var(--accent); }
+.blue { background:var(--blue); }
+.yellow { background:var(--yellow); }
+.red { background:var(--red); }
+
+.metric-grid {
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:10px;
+  margin-bottom:18px;
+}
+
+.metric {
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:13px;
+  padding:15px;
+  animation:rise .5s ease both;
+}
+.metric:nth-child(2) { animation-delay:.05s; }
+.metric:nth-child(3) { animation-delay:.1s; }
+.metric:nth-child(4) { animation-delay:.15s; }
+
+.metric-label {
+  font-size:11px;
+  color:var(--muted);
+}
+.metric-value {
+  font-size:19px;
+  font-weight:800;
+  margin-top:7px;
+  overflow-wrap:anywhere;
+}
+
+.line {
+  display:flex;
+  justify-content:space-between;
+  gap:12px;
+  margin:15px 0;
+  font-size:12px;
+}
+.line span:first-child { color:var(--muted); }
+.line span:last-child {
+  font-weight:750;
+  text-align:right;
+  overflow-wrap:anywhere;
+}
+
+.rule {
+  background:var(--surface2);
+  border:1px solid #29364b;
+  border-radius:12px;
+  padding:15px;
+  margin-top:12px;
+}
+
+.rule-top {
+  display:flex;
+  justify-content:space-between;
+  gap:12px;
+  font-size:12px;
+  font-weight:750;
+}
+.rule p {
+  font-size:11px;
+  color:var(--muted);
+  margin:9px 0 0;
+}
+
+.note {
+  margin-top:15px;
+  padding:12px 14px;
+  background:#88a9ff0b;
+  border-left:3px solid var(--blue);
+  border-radius:0 9px 9px 0;
+  font-size:11px;
+  color:#c1cce0;
+}
+
+.affordability {
+  border-radius:12px;
+  border:1px solid var(--border);
+  background:var(--surface2);
+  padding:16px;
+  margin-top:17px;
+}
+
+.affordability h3 { font-size:15px; margin:0 0 8px; }
+.affordability p { font-size:12px; color:var(--muted); margin:0; }
+
+.empty-state {
+  padding:35px 20px;
+  text-align:center;
+  border:1px dashed #3a485e;
+  border-radius:var(--radius);
+  background:#11172288;
+  margin-bottom:18px;
+}
+.empty-icon { font-size:29px; margin-bottom:12px; }
+.empty-state h2 { font-size:17px; margin:0 0 7px; }
+.empty-state p {
+  font-size:12px;
+  color:var(--muted);
+  margin:0 auto;
+  max-width:270px;
+}
+
+.hidden { display:none !important; }
+.result-content { animation:appear .4s ease both; }
+
+footer {
+  color:var(--muted);
+  font-size:11px;
+  text-align:center;
+  padding-top:15px;
+}
+
+@keyframes appear {
+  from { opacity:0; transform:translateY(12px); }
+  to { opacity:1; transform:translateY(0); }
+}
+@keyframes rise {
+  from { opacity:0; transform:translateY(9px); }
+  to { opacity:1; transform:translateY(0); }
+}
+
+@media(prefers-reduced-motion:reduce) {
+  *,*::before,*::after {
+    animation-duration:.01ms !important;
+    transition-duration:.01ms !important;
+    scroll-behavior:auto !important;
+  }
+}
+@media(max-width:850px) {
+  .layout { grid-template-columns:1fr; }
+  .results { position:static; }
+}
+@media(max-width:480px) {
+  .container { padding:18px 12px 35px; }
+  .panel,.result-card,.hero-result { padding:17px; }
+  .fields { gap:12px; }
+  input[type="number"] { padding:12px 9px; font-size:13px; }
+  h1 { letter-spacing:-1.5px; }
+  .pill { font-size:9px; }
+}
+</style>
+</head>
+
+<body>
+<div class="container">
+
+<header>
+  <div class="brand">Auto<span>Wise.</span></div>
+  <div class="pill">CAR FINANCIAL PLANNER</div>
+</header>
+
+<section class="hero">
+  <div class="eyebrow">Your money. Your next car.</div>
+  <h1>Know the real cost<br>of your <span>next car.</span></h1>
+  <p>Calculate your monthly EMI, running costs, total ownership expenses and long-term affordability using your own financial details.</p>
+</section>
+
+<div class="layout">
+
+<main>
+<form id="carForm" novalidate>
+<section class="panel">
+  <h2>Your vehicle calculator</h2>
+  <p class="subtext">Enter your figures below. No sample financial data is used.</p>
+
+  <div class="section-label">01 — Your finances</div>
+  <div class="fields">
+    <div class="field full">
+      <label for="salary">Monthly in-hand salary (₹)</label>
+      <input id="salary" type="number" min="0.01" step="any"
+        placeholder="Enter monthly take-home salary" required>
+    </div>
+    <div class="field full">
+      <label for="budget">Monthly budget for vehicle (₹)</label>
+      <input id="budget" type="number" min="0" step="any"
+        placeholder="Maximum you plan to spend monthly" required>
+      <div class="hint">Your personal monthly limit for EMI and running costs. This is separate from the 30% income guideline.</div>
+    </div>
+  </div>
+
+  <div class="section-label">02 — Purchase and loan</div>
+  <div class="fields">
+    <div class="field full">
+      <label for="price">On-road vehicle price (₹)</label>
+      <input id="price" type="number" min="0.01" step="any"
+        placeholder="Include registration, taxes and applicable charges" required>
+    </div>
+    <div class="field full">
+      <label for="down">Down payment (₹)</label>
+      <input id="down" type="number" min="0" step="any"
+        placeholder="Amount paid upfront" required>
+      <div class="hint">This amount will be deducted from the on-road price to calculate the loan principal.</div>
+    </div>
+    <div class="field">
+      <label for="tenure">Loan tenure (years)</label>
+      <input id="tenure" type="number" min="1" max="10" step="1"
+        placeholder="e.g. 5" required>
+      <div class="hint">Choose 1–10 whole years.</div>
+    </div>
+    <div class="field">
+      <label>Interest rate (annual)</label>
+      <div class="interest-box">
+        <div class="interest-top">
+          <span class="hint" style="margin:0">Adjust the slider</span>
+          <span id="rateDisplay" class="interest-value">Not set</span>
+        </div>
+        <input id="rate" type="range" min="0" max="30" step="0.1" value="0"
+          aria-label="Annual loan interest rate">
+        <div class="range-labels"><span>0%</span><span>15%</span><span>30%</span></div>
+      </div>
+      <div class="hint">Move the slider to set your annual rate. It starts unset.</div>
+    </div>
+  </div>
+
+  <div class="section-label">03 — Estimated running costs</div>
+  <div class="fields">
+    <div class="field">
+      <label for="daily">Daily running (km)</label>
+      <input id="daily" type="number" min="0" step="any"
+        placeholder="Distance driven daily" required>
+    </div>
+    <div class="field">
+      <label for="days">Days used per month</label>
+      <input id="days" type="number" min="0" max="31" step="1"
+        placeholder="e.g. 25" required>
+      <div class="hint">Estimated days of driving per month, from 0 to 31.</div>
+    </div>
+    <div class="field">
+      <label for="mileage">Real-world mileage (km/L)</label>
+      <input id="mileage" type="number" min="0.01" step="any"
+        placeholder="Actual average mileage" required>
+    </div>
+    <div class="field">
+      <label for="fuel">Fuel price per litre (₹)</label>
+      <input id="fuel" type="number" min="0" step="any"
+        placeholder="Your local fuel price" required>
+    </div>
+    <div class="field full">
+      <label for="maintenance">Maintenance cost per year (₹)</label>
+      <input id="maintenance" type="number" min="0" step="any"
+        placeholder="Estimated annual maintenance" required>
+      <div class="hint">Include everything: service costs, replacement parts (such as tyres and batteries), wear and tear, and expected damage or repair costs.</div>
+    </div>
+    <div class="field full">
+      <label for="insurance">Insurance cost per year (₹)</label>
+      <input id="insurance" type="number" min="0" step="any"
+        placeholder="Estimated annual insurance premium" required>
+      <div class="hint">Enter the annual insurance cost, not the total for the entire vehicle lifespan.</div>
+    </div>
+    <div class="field full">
+      <label for="lifespan">Vehicle lifespan — how many years will you use it?</label>
+      <input id="lifespan" type="number" min="1" max="50" step="1"
+        placeholder="e.g. 8" required>
+      <div class="hint">Used to estimate cumulative running costs over your planned ownership period.</div>
+    </div>
+  </div>
+
+  <div class="note">
+    <strong>Fuel calculation:</strong> daily kilometres × driving days per month ÷ real-world mileage × fuel price per litre. The estimate assumes your driving pattern remains consistent.
+  </div>
+
+  <div class="actions">
+    <button class="btn btn-primary" type="submit">Calculate affordability ↗</button>
+    <button class="btn btn-secondary" type="reset">Clear all fields</button>
+  </div>
+  <div id="formError" class="error-message hidden" role="alert"></div>
+</section>
+</form>
+</main>
+
+<aside class="results">
+
+  <div id="emptyState" class="empty-state">
+    <div class="empty-icon">↗</div>
+    <h2>Your results will appear here</h2>
+    <p>Enter your actual figures and adjust the interest slider to see your affordability report.</p>
+  </div>
+
+  <div id="resultsContent" class="result-content hidden" aria-live="polite">
+
+    <section class="hero-result">
+      <span id="verdict" class="status warn">AFFORDABILITY</span>
+      <div class="result-label">Total monthly vehicle expense</div>
+      <div id="monthlyTotal" class="big">—</div>
+      <div class="result-description">EMI + fuel + maintenance + insurance</div>
+
+      <div class="line" style="margin-top:23px">
+        <span>Percentage of in-hand salary</span>
+        <span id="salaryShare">—</span>
+      </div>
+      <div class="bar"><div id="salaryBar" class="bar-fill green"></div></div>
+      <div id="limitText" class="result-description"></div>
+
+      <div class="affordability">
+        <h3 id="affordTitle">Can you afford it?</h3>
+        <p id="affordText"></p>
+      </div>
+    </section>
+
+    <div class="metric-grid">
+      <div class="metric">
+        <div class="metric-label">Monthly EMI</div>
+        <div id="emi" class="metric-value">—</div>
+      </div>
+      <div class="metric">
+        <div class="metric-label">Monthly running cost</div>
+        <div id="running" class="metric-value">—</div>
+      </div>
+      <div class="metric">
+        <div class="metric-label">Yearly vehicle expense</div>
+        <div id="yearly" class="metric-value">—</div>
+      </div>
+      <div class="metric">
+        <div class="metric-label">Budget remaining</div>
+        <div id="budgetRemaining" class="metric-value">—</div>
+      </div>
+    </div>
+
+    <section class="result-card">
+      <h2>Running cost breakdown</h2>
+      <p class="subtext">Estimated cost to operate your vehicle.</p>
+      <div class="line"><span>Fuel / month</span><span id="fuelMonthly"></span></div>
+      <div class="line"><span>Maintenance reserve / month</span><span id="maintenanceMonthly"></span></div>
+      <div class="line"><span>Insurance reserve / month</span><span id="insuranceMonthly"></span></div>
+      <div class="line"><span>Total running cost / month</span><span id="runningTotal"></span></div>
+      <div class="line"><span>Total running cost / year</span><span id="runningYearly"></span></div>
+      <div class="line"><span>Running costs over lifespan</span><span id="runningLifetime"></span></div>
+      <div class="note">Annual maintenance and insurance are divided by 12 to create monthly reserves. Actual expenses may occur irregularly.</div>
+    </section>
+
+    <section class="result-card">
+      <h2>Loan breakdown</h2>
+      <p class="subtext">Your loan repayment and financing costs.</p>
+      <div class="line"><span>On-road price</span><span id="priceOut"></span></div>
+      <div class="line"><span>Down payment</span><span id="downOut"></span></div>
+      <div class="line"><span>Loan principal</span><span id="principal"></span></div>
+      <div class="line"><span>Annual interest rate</span><span id="rateOut"></span></div>
+      <div class="line"><span>Loan tenure</span><span id="tenureOut"></span></div>
+      <div class="line"><span>Total of all EMIs</span><span id="totalEmis"></span></div>
+      <div class="line"><span>Total loan interest</span><span id="interest"></span></div>
+      <div class="line"><span>Down payment + EMIs</span><span id="purchaseOutlay"></span></div>
+      <div class="note">The EMI uses a standard reducing-balance loan calculation. Processing fees, prepayment charges and other lender fees are not included.</div>
+    </section>
+
+    <section class="result-card">
+      <h2>Long-term ownership cost</h2>
+      <p class="subtext">Estimated total cost over your chosen ownership period.</p>
+      <div class="result-label">Estimated total cost of ownership</div>
+      <div id="lifetimeTotal" class="big">—</div>
+      <div class="line"><span>Vehicle purchase price</span><span id="lifetimePrice"></span></div>
+      <div class="line"><span>Total loan interest</span><span id="lifetimeInterest"></span></div>
+      <div class="line"><span>Running costs over lifespan</span><span id="lifetimeRunning"></span></div>
+      <div class="line"><span>Average cost per ownership month</span><span id="lifetimeMonthly"></span></div>
+      <div class="note">This estimate adds the on-road price, interest over the full loan tenure, and running costs over your planned lifespan. It excludes resale value, depreciation, taxes or fees not in the on-road price, and the time value of money. It assumes the car is fully paid off by the end of the calculation.</div>
+    </section>
+
+    <section class="result-card">
+      <h2>Final affordability report</h2>
+      <p class="subtext">Your personal budget and the recommended income threshold.</p>
+      <div class="line"><span>Monthly in-hand salary</span><span id="salaryOut"></span></div>
+      <div class="line"><span>Recommended 30% limit</span><span id="threshold"></span></div>
+      <div class="line"><span>Your monthly vehicle budget</span><span id="budgetOut"></span></div>
+      <div class="line"><span>Monthly cost vs 30% limit</span><span id="limitDifference"></span></div>
+      <div class="line"><span>Monthly cost vs personal budget</span><span id="budgetDifference"></span></div>
+      <div class="note" id="recommendation"></div>
+    </section>
+
+  </div>
+</aside>
+</div>
+
+<footer>AutoWise · Estimates based on user-entered information · Not financial advice</footer>
+</div>
+
+<script>
+"use strict";
+
+const $ = id => document.getElementById(id);
+
+const fieldIds = [
+  "salary", "budget", "price", "down", "tenure",
+  "daily", "days", "mileage", "fuel",
+  "maintenance", "insurance", "lifespan"
+];
+
+const form = $("carForm");
+const rateSlider = $("rate");
+let rateWasSet = false;
+
+const money = value =>
+  new Intl.NumberFormat("en-IN", {
+    style: "currency",
+    currency: "INR",
+    maximumFractionDigits: 0
+  }).format(value);
+
+const pct = value =>
+  Number.isFinite(value) ? value.toFixed(1) + "%" : "—";
+
+function set(id, value) {
+  $(id).textContent = value;
+}
+
+function bar(id, value, color) {
+  const el = $(id);
+  el.className = "bar-fill " + color;
+  el.style.width = Math.max(0, Math.min(100, value)) + "%";
+}
+
+function clearResults() {
+  $("resultsContent").classList.add("hidden");
+  $("emptyState").classList.remove("hidden");
+  $("formError").classList.add("hidden");
+
+  document.querySelectorAll(".bar-fill").forEach(el => {
+    el.style.width = "0%";
+  });
+}
+
+function showError(message, field) {
+  const error = $("formError");
+  error.textContent = message;
+  error.classList.remove("hidden");
+
+  if (field) field.focus();
+}
+
+function readValues() {
+  const d = {};
+
+  for (const id of fieldIds) {
+    const input = $(id);
+    const raw = input.value.trim();
+
+    if (raw === "") {
+      return {
+        error: "Complete every field. Enter 0 for costs that do not apply.",
+        field: input
+      };
+    }
+
+    const value = Number(raw);
+
+    if (!Number.isFinite(value) || value < 0) {
+      return {
+        error: "Enter a valid non-negative number in " +
+          input.labels[0].textContent + ".",
+        field: input
+      };
+    }
+
+    d[id] = value;
+  }
+
+  if (!rateWasSet) {
+    return {
+      error: "Move the interest-rate slider to set your annual interest rate.",
+      field: rateSlider
+    };
+  }
+
+  if (d.salary <= 0)
+    return { error: "Monthly salary must be greater than zero.", field: $("salary") };
+
+  if (d.price <= 0)
+    return { error: "On-road price must be greater than zero.", field: $("price") };
+
+  if (d.down > d.price)
+    return { error: "Down payment cannot exceed the on-road price.", field: $("down") };
+
+  if (!Number.isInteger(d.tenure) || d.tenure < 1 || d.tenure > 10)
+    return { error: "Loan tenure must be a whole number between 1 and 10 years.", field: $("tenure") };
+
+  if (!Number.isInteger(d.days) || d.days > 31)
+    return { error: "Days used per month must be a whole number from 0 to 31.", field: $("days") };
+
+  if (d.mileage <= 0)
+    return { error: "Mileage must be greater than zero.", field: $("mileage") };
+
+  if (!Number.isInteger(d.lifespan) || d.lifespan < 1 || d.lifespan > 50)
+    return { error: "Vehicle lifespan must be a whole number from 1 to 50 years.", field: $("lifespan") };
+
+  return { values: d };
+}
+
+function calculate(event) {
+  if (event) event.preventDefault();
+
+  const result = readValues();
+
+  if (result.error) {
+    clearResults();
+    showError(result.error, result.field);
+    return;
+  }
+
+  const d = result.values;
+  const annualRate = Number(rateSlider.value);
+  const monthlyRate = annualRate / 1200;
+
+  // Loan principal and standard reducing-balance EMI.
+  const principal = d.price - d.down;
+  const loanMonths = d.tenure * 12;
+
+  let emi = 0;
+
+  if (principal > 0) {
+    if (monthlyRate === 0) {
+      emi = principal / loanMonths;
+    } else {
+      const denominator =
+        -Math.expm1(-loanMonths * Math.log1p(monthlyRate));
+      emi = principal * monthlyRate / denominator;
+    }
+  }
+
+  const totalEmis = emi * loanMonths;
+  const totalInterest = Math.max(0, totalEmis - principal);
+
+  // Fuel usage is based on actual days driven per month.
+  const monthlyDistance = d.daily * d.days;
+  const fuelMonthly = monthlyDistance / d.mileage * d.fuel;
+
+  // Convert annual expenses to monthly reserves.
+  const maintenanceMonthly = d.maintenance / 12;
+  const insuranceMonthly = d.insurance / 12;
+
+  const runningMonthly =
+    fuelMonthly + maintenanceMonthly + insuranceMonthly;
+
+  // Monthly expense includes the EMI during the loan term.
+  const monthlyVehicleCost = emi + runningMonthly;
+  const yearlyVehicleCost = monthlyVehicleCost * 12;
+
+  // Budget and 30% salary guideline.
+  const incomeLimit = d.salary * 0.30;
+  const salaryShare = monthlyVehicleCost / d.salary * 100;
+
+  const budgetRemaining = d.budget - monthlyVehicleCost;
+  const limitDifference = incomeLimit - monthlyVehicleCost;
+
+  const budgetOK = budgetRemaining >= 0;
+  const limitOK = monthlyVehicleCost <= incomeLimit;
+  const affordable = budgetOK && limitOK;
+
+  // Long-term ownership cost:
+  // purchase price + all loan interest + running costs over lifespan.
+  const lifespanMonths = d.lifespan * 12;
+  const lifetimeRunning = runningMonthly * lifespanMonths;
+  const lifetimeTotal = d.price + totalInterest + lifetimeRunning;
+  const lifetimeAverage = lifetimeTotal / lifespanMonths;
+
+  // Monthly affordability hero.
+  set("monthlyTotal", money(monthlyVehicleCost));
+  set("salaryShare", pct(salaryShare));
+
+  bar(
+    "salaryBar",
+    salaryShare,
+    limitOK ? "green" : "red"
+  );
+
+  set("limitText", limitOK
+    ? `You are ${money(limitDifference)} below the recommended 30% monthly limit.`
+    : `You exceed the recommended limit by ${money(-limitDifference)} per month.`
+  );
+
+  // Main metrics.
+  set("emi", money(emi));
+  set("running", money(runningMonthly));
+  set("yearly", money(yearlyVehicleCost));
+  set("budgetRemaining", money(budgetRemaining));
+
+  // Running cost breakdown.
+  set("fuelMonthly", money(fuelMonthly));
+  set("maintenanceMonthly", money(maintenanceMonthly));
+  set("insuranceMonthly", money(insuranceMonthly));
+  set("runningTotal", money(runningMonthly));
+  set("runningYearly", money(runningMonthly * 12));
+  set("runningLifetime", money(lifetimeRunning));
+
+  // Loan breakdown.
+  set("priceOut", money(d.price));
+  set("downOut", money(d.down));
+  set("principal", money(principal));
+  set("rateOut", pct(annualRate));
+  set("tenureOut", d.tenure + " years");
+  set("totalEmis", money(totalEmis));
+  set("interest", money(totalInterest));
+  set("purchaseOutlay", money(d.down + totalEmis));
+
+  // Lifetime ownership cost.
+  set("lifetimeTotal", money(lifetimeTotal));
+  set("lifetimePrice", money(d.price));
+  set("lifetimeInterest", money(totalInterest));
+  set("lifetimeRunning", money(lifetimeRunning));
+  set("lifetimeMonthly", money(lifetimeAverage));
+
+  // Final report.
+  set("salaryOut", money(d.salary));
+  set("threshold", money(incomeLimit));
+  set("budgetOut", money(d.budget));
+  set("limitDifference",
+    (limitDifference >= 0 ? "Under by " : "Over by ") +
+    money(Math.abs(limitDifference))
+  );
+  set("budgetDifference",
+    (budgetRemaining >= 0 ? "Under by " : "Over by ") +
+    money(Math.abs(budgetRemaining))
+  );
+
+  // Final affordability verdict.
+  const verdict = $("verdict");
+  const title = $("affordTitle");
+  const text = $("affordText");
+
+  if (affordable) {
+    verdict.textContent = "WITHIN YOUR LIMITS";
+    verdict.className = "status good";
+    title.textContent = "The car fits your current budget";
+    text.textContent =
+      "Your monthly vehicle cost is within both your personal vehicle budget and the recommended 30% of salary. Maintain an emergency fund and allow for unexpected expenses.";
+  } else if (!budgetOK && !limitOK) {
+    verdict.textContent = "BUDGET EXCEEDED";
+    verdict.className = "status bad";
+    title.textContent = "This car may stretch your finances";
+    text.textContent =
+      "Your estimated monthly cost exceeds both your personal budget and the recommended 30% income limit. Consider a lower-priced vehicle, a larger down payment or lower ownership costs.";
+  } else if (!budgetOK) {
+    verdict.textContent = "OVER PERSONAL BUDGET";
+    verdict.className = "status warn";
+    title.textContent = "Your vehicle budget is too low";
+    text.textContent =
+      "The vehicle exceeds your personal monthly budget, even though it remains within the 30% salary guideline. Reduce the estimated monthly cost or revise your budget carefully.";
+  } else {
+    verdict.textContent = "OVER 30% GUIDELINE";
+    verdict.className = "status warn";
+    title.textContent = "Consider a more affordable vehicle";
+    text.textContent =
+      "The car fits your personal budget but exceeds the recommended 30% of monthly income. For long-term financial stability, it is recommended that you keep total vehicle expenses under 30% of your in-hand salary.";
+  }
+
+  set("recommendation",
+    `Your estimated vehicle expense is ${pct(salaryShare)} of your monthly salary. ` +
+    (limitOK
+      ? "It is within the recommended 30% guideline."
+      : "For long-term financial stability, it is recommended that you keep your vehicle expenses under 30% of your in-hand salary.") +
+    " " +
+    (budgetOK
+      ? "Your personal monthly vehicle budget is sufficient for the estimated cost."
+      : "Your personal vehicle budget needs to increase, or your vehicle costs need to decrease.")
+  );
+
+  $("emptyState").classList.add("hidden");
+  $("resultsContent").classList.remove("hidden");
+  $("formError").classList.add("hidden");
+}
+
+// Slider is the source of truth for the interest rate.
+rateSlider.addEventListener("input", () => {
+  rateWasSet = true;
+  set("rateDisplay", Number(rateSlider.value).toFixed(1) + "%");
+
+  if (readValues().values) {
+    calculate();
+  } else {
+    clearResults();
+    $("formError").classList.add("hidden");
+  }
+});
+
+form.addEventListener("submit", calculate);
+
+// Update the results live, but never show stale calculations
+// after a field is cleared or becomes invalid.
+fieldIds.forEach(id => {
+  $(id).addEventListener("input", () => {
+    const result = readValues();
+
+    if (result.values) {
+      calculate();
+    } else {
+      clearResults();
+      $("formError").classList.add("hidden");
+    }
+  });
+});
+
+// Reset all fields, including the interest slider, to an unset state.
+form.addEventListener("reset", () => {
+  setTimeout(() => {
+    rateWasSet = false;
+    rateSlider.value = "0";
+    set("rateDisplay", "Not set");
+    clearResults();
+  }, 0);
+});
+
+// No example data and no calculations on first load.
+clearResults();
+</script>
+</body>
+</html>
